@@ -1,5 +1,7 @@
 # Standard Solution Review System
 
+English | [简体中文](README.md)
+
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![PyQt6](https://img.shields.io/badge/PyQt6-GUI-green)
 ![SQLite](https://img.shields.io/badge/SQLite-Database-blue)
@@ -11,7 +13,7 @@ The software supports automatic temperature correction, burette calibration corr
 
 Simply enter the required data, and the software will automatically complete the calculation.
 
-![](https://img.weigeshare.cc.cd/img/002.StandardSolution_Review_System_Demo_GIF.gif)
+![](resource/002.StandardSolution_Review_System_Demo_GIF.gif)
 
 Simply enter the required data and calculate instantly.
 

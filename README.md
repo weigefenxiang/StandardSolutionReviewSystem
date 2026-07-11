@@ -1,5 +1,7 @@
 # 标准溶液计算审核系统
 
+[English](README_EN.md) | 简体中文
+
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![PyQt6](https://img.shields.io/badge/PyQt6-GUI-green)
 ![SQLite](https://img.shields.io/badge/SQLite-Database-blue)
@@ -9,9 +11,9 @@
 
 支持温度校正、滴定管校正、单人四平行、双人八平行及相对极差自动计算。
 
-![](https://img.weigeshare.cc.cd/img/002.StandardSolution_Review_System_Demo_GIF.gif)
+![](resource/002.StandardSolution_Review_System_Demo_GIF.gif)
 
-即可计算
+输入所需数据后，即可完成计算。
 
 ## 功能特点
 
