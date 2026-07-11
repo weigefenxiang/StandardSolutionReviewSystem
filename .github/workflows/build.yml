@@ -1,0 +1,120 @@
+name: Build And Release EXE
+
+on:
+  push:
+    tags:
+      - "v*"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Upgrade Pip
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install nuitka
+
+      - name: Verify Environment
+        run: |
+          python --version
+          pip list
+
+      - name: Verify Nuitka
+        run: |
+          python -m nuitka --version
+
+      - name: Check Project Files
+        shell: cmd
+        run: |
+          dir
+
+          if exist VolumeCorrectionValue.db (
+            echo Database Found
+          ) else (
+            echo Database Missing
+            exit /b 1
+          )
+
+          if exist resource\Wei.G.ico (
+            echo Icon Found
+          ) else (
+            echo Icon Missing
+            exit /b 1
+          )
+
+      - name: Build EXE With Nuitka
+        shell: cmd
+        run: |
+          python -m nuitka ^
+          --standalone ^
+          --onefile ^
+          --jobs=20 ^
+          --follow-imports ^
+          --enable-plugin=pyqt6 ^
+          --include-module=darkdetect ^
+          --windows-console-mode=disable ^
+          --show-progress ^
+          --show-memory ^
+          --assume-yes-for-downloads ^
+          --remove-output ^
+          --include-data-dir=resource=resource ^
+          --include-data-files=VolumeCorrectionValue.db=VolumeCorrectionValue.db ^
+          --windows-icon-from-ico=resource/Wei.G.ico ^
+          --file-version=1.0.0.3 ^
+          --product-version=1.0.0.3 ^
+          --company-name="Ruyuan Electrochemical Plant of Guangdong Dongyangguang HEC Technology Holdings Co., Ltd." ^
+          --product-name="Standard Solution Review System" ^
+          --file-description="Standard Titrant Concentration Calculation Program" ^
+          --copyright="Copyright © 2025 Wei.G" ^
+          --output-filename=StandardSolutionReviewSystem-${{ github.ref_name }} ^
+          Flu_Main.py
+          
+      - name: Check Build Output
+        shell: cmd
+        run: |
+          dir
+
+      - name: Upload EXE Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StandardSolutionReviewSystem
+          path: |
+            *.exe
+
+      - name: Upload Build Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            *.log
+            *.xml
+            *.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          files: |
+            StandardSolutionReviewSystem-*.exe
